@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>InsectiScan - Insect Bite Identification App</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -14,7 +14,7 @@
     <header>
         <nav>
             <div class="logo">
-                <img src="/api/placeholder/120/40" alt="InsectiScan Logo">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="InsectiScan Logo">
                 <h1>InsectiScan</h1>
             </div>
             <div class="nav-links">
@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div class="hero-image">
-                <img src="/api/placeholder/300/600" alt="InsectiScan App Demo">
+                <img src="{{ url_for('static', filename='img/app-demo.png') }}" alt="InsectiScan App Demo">
             </div>
         </section>
 
@@ -104,14 +104,14 @@
             <h2>Download InsectiScan Today</h2>
             <p>Available on iOS and Android devices</p>
             <div class="download-buttons">
-                <a href="#" class="download-btn">
+                <a href="{{ url_for('download_ios') }}" class="download-btn">
                     <i class="fab fa-apple"></i>
                     <span>
                         <small>Download on the</small>
                         App Store
                     </span>
                 </a>
-                <a href="#" class="download-btn">
+                <a href="{{ url_for('download_android') }}" class="download-btn">
                     <i class="fab fa-google-play"></i>
                     <span>
                         <small>GET IT ON</small>
@@ -133,7 +133,7 @@
                     <p>"This app saved me from unnecessary worry when my daughter got a mysterious bite during our camping trip. Highly recommended!"</p>
                     <div class="user">
                         <div class="user-image">
-                            <img src="/api/placeholder/50/50" alt="User">
+                            <img src="{{ url_for('static', filename='img/user1.jpg') }}" alt="User">
                         </div>
                         <div class="user-info">
                             <h4>Sarah M.</h4>
@@ -145,7 +145,7 @@
                     <p>"As someone who reacts badly to insect bites, this app has been invaluable for identifying what bit me and how to treat it properly."</p>
                     <div class="user">
                         <div class="user-image">
-                            <img src="/api/placeholder/50/50" alt="User">
+                            <img src="{{ url_for('static', filename='img/user2.jpg') }}" alt="User">
                         </div>
                         <div class="user-info">
                             <h4>James T.</h4>
@@ -160,7 +160,7 @@
     <footer id="contact">
         <div class="footer-content">
             <div class="footer-logo">
-                <img src="/api/placeholder/120/40" alt="InsectiScan Logo">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="InsectiScan Logo">
                 <h3>InsectiScan</h3>
             </div>
             <div class="footer-links">
@@ -173,8 +173,8 @@
                 </div>
                 <div class="footer-section">
                     <h4>Legal</h4>
-                    <a href="#">Privacy Policy</a>
-                    <a href="#">Terms of Service</a>
+                    <a href="{{ url_for('privacy') }}">Privacy Policy</a>
+                    <a href="{{ url_for('terms') }}">Terms of Service</a>
                 </div>
                 <div class="footer-section">
                     <h4>Contact</h4>
@@ -192,6 +192,6 @@
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
