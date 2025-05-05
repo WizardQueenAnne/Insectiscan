@@ -8,10 +8,10 @@ def index():
     """Render the main index page."""
     return render_template('index.html')
 
-@app.route('/assets/<path:path>')
-def send_assets(path):
-    """Serve static assets."""
-    return send_from_directory('assets', path)
+@app.route('/static/<path:path>')
+def serve_static(path):
+    """Serve static files (CSS, JS, images)."""
+    return send_from_directory('static', path)
 
 @app.route('/download/android')
 def download_android():
@@ -35,8 +35,13 @@ def terms():
     """Render the terms of service page."""
     return render_template('terms.html')
 
+# This ensures Flask knows where to find templates
+app.template_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
+app.static_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
+
 if __name__ == '__main__':
     # Use environment variable for port if available (for production)
     port = int(os.environ.get('PORT', 5000))
     # Set debug to False in production
-    app.run(host='0.0.0.0', port=port, debug=False)
+    debug_mode = os.environ.get('DEBUG', 'False').lower() == 'true'
+    app.run(host='0.0.0.0', port=port, debug=debug_mode)
