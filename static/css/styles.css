@@ -1,0 +1,79 @@
+/* Base styles */
+:root {
+    --primary-color: #2ecc71; /* Green */
+    --secondary-color: #3498db; /* Blue */
+    --accent-color: #16a085; /* Darker green */
+    --light-bg: #f8f9fa;
+    --dark-bg: #2c3e50;
+    --text-dark: #333;
+    --text-light: #f8f9fa;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    color: var(--text-dark);
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+header {
+    background-color: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 20px 0;
+    text-align: center;
+}
+
+header h1 {
+    color: var(--primary-color);
+    margin: 0;
+}
+
+/* Basic button styles */
+.button {
+    display: inline-block;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: var(--accent-color);
+}
+
+.button.blue {
+    background-color: var(--secondary-color);
+}
+
+.button.blue:hover {
+    background-color: #2980b9;
+}
+
+/* Footer styles */
+footer {
+    background-color: var(--dark-bg);
+    color: var(--text-light);
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 50px;
+}
+
+footer a {
+    color: var(--text-light);
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
