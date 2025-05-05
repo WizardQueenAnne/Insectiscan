@@ -1,38 +1,48 @@
 # InsectiScan
 
-InsectiScan is a mobile application that identifies and diagnoses insect bites based on user-provided images and descriptions. This repository contains the code for the InsectiScan website, which provides information about the app and download links.
+InsectiScan is a mobile application that identifies and diagnoses insect bites based on user-provided images and descriptions. This repository contains the code for the InsectiScan website.
 
-## Website Overview
+## Deployment Fix
 
-The InsectiScan website is designed to:
+If you're encountering the `TemplateNotFound: index.html` error when deploying to Render, follow these steps:
 
-- Showcase the app's features and benefits
-- Provide download links for iOS and Android platforms
-- Share user testimonials and information about the app
-- Offer easy navigation to resources and contact information
+1. Make sure your project follows this directory structure:
+```
+insectiscan/
+├── app.py                # Flask application
+├── requirements.txt      # Python dependencies
+├── static/               # Create this directory for static files
+│   ├── css/              
+│   │   └── styles.css    
+│   ├── js/               
+│   │   └── script.js     
+│   └── img/              
+│       └── ...           # Image files
+├── templates/            # Create this directory for HTML templates
+│   ├── index.html        # Main page template
+│   ├── privacy.html      # Privacy policy template
+│   └── terms.html        # Terms of service template
+```
 
-## Features
+2. Make sure your `app.py` file correctly specifies the template and static folders:
 
-- Responsive design that works on all devices
-- Clean, user-friendly interface with a blue and green theme
-- Smooth scrolling navigation
-- Download buttons for different platforms
-- Information about the app's features and how it works
+```python
+app.template_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
+app.static_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'static')
+```
 
-## Technical Stack
+3. Verify that all HTML files are in the `templates` directory.
 
-- **Frontend**: HTML5, CSS3, JavaScript
-- **Backend**: Python with Flask
-- **Deployment**: Compatible with various hosting platforms
+4. Verify that all CSS, JS, and image files are in the appropriate subdirectories within the `static` directory.
 
-## Setup Instructions
+5. Update paths in your HTML files to reference static content correctly:
+```html
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo">
+```
 
-### Prerequisites
-
-- Python 3.8 or higher
-- pip (Python package installer)
-
-### Installation
+## Development Setup
 
 1. Clone the repository:
    ```
@@ -67,48 +77,27 @@ The InsectiScan website is designed to:
 
 6. Open your browser and navigate to `http://localhost:5000`
 
-## Directory Structure
+## Deployment to Render
 
-```
-insectiscan/
-├── app.py              # Flask application
-├── static/             # Static files
-│   ├── css/            # CSS stylesheets
-│   │   └── styles.css  # Main stylesheet
-│   ├── js/             # JavaScript files
-│   │   └── script.js   # Main JavaScript file
-│   └── img/            # Images and assets
-├── templates/          # HTML templates
-│   ├── index.html      # Main page template
-│   ├── privacy.html    # Privacy policy template
-│   └── terms.html      # Terms of service template
-└── requirements.txt    # Python dependencies
-```
+1. Push your changes to GitHub with the correct directory structure.
 
-## Deployment
+2. In your Render dashboard, select "Web Service" and connect to your GitHub repository.
 
-The website is ready to be deployed on any platform that supports Flask applications, such as:
+3. Configure your service:
+   - Build Command: `pip install -r requirements.txt`
+   - Start Command: `gunicorn app:app`
 
-- Heroku
-- AWS Elastic Beanstalk
-- Google Cloud Platform
-- DigitalOcean
+4. Once deployed, verify that the site loads correctly.
 
-Follow the deployment instructions for your chosen platform.
+## Troubleshooting
 
-## Customization
+If you still encounter the error after following these steps, check the following:
 
-To customize the website:
-
-1. Modify the HTML files in the `templates` directory
-2. Update styles in `static/css/styles.css`
-3. Adjust scripts in `static/js/script.js`
-4. Replace placeholder images with your own in the `static/img` directory
+1. Ensure all files have the correct permissions.
+2. Verify that there are no syntax errors in your templates.
+3. Check the Render logs for any specific error messages.
+4. Try using absolute paths if relative paths are not working.
 
 ## Contact
 
-For questions or suggestions, please contact info@insectiscan.org or visit [insectiscan.org](https://insectiscan.org).
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
+For questions or support, contact us at info@insectiscan.org.
