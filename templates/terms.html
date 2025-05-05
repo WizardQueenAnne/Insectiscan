@@ -1,1 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - InsectiScan</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .terms-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 120px 20px 60px;
+        }
+        
+        .terms-content h1 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+        }
+        
+        .terms-content h2 {
+            font-size: 1.8rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: var(--secondary-color);
+        }
+        
+        .terms-content p, .terms-content ul {
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+        
+        .terms-content ul {
+            padding-left: 2rem;
+        }
+        
+        .terms-content ul li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .last-updated {
+            font-style: italic;
+            opacity: 0.7;
+            margin-bottom: 2rem;
+        }
+        
+        .important {
+            background-color: rgba(52, 152, 219, 0.1);
+            border-left: 4px solid var(--secondary-color);
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="InsectiScan Logo">
+                <h1>InsectiScan</h1>
+            </div>
+            <div class="nav-links">
+                <a href="{{ url_for('index') }}">Home</a>
+                <a href="{{ url_for('index') }}#features">Features</a>
+                <a href="{{ url_for('index') }}#download">Download</a>
+                <a href="{{ url_for('index') }}#about">About</a>
+                <a href="{{ url_for('index') }}#contact">Contact</a>
+            </div>
+            <div class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </div>
+        </nav>
+    </header>
 
+    <main class="terms-content">
+        <h1>Terms of Service</h1>
+        <p class="last-updated">Last Updated: May 5, 2025</p>
+        
+        <p>Please read these Terms of Service ("Terms") carefully before using the InsectiScan mobile application and website (the "Service").</p>
+        
+        <div class="important">
+            <p><strong>IMPORTANT NOTICE:</strong> InsectiScan provides information about insect bites and potential treatments for educational purposes only. It is not intended to replace professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.</p>
+        </div>
+        
+        <h2>Acceptance of Terms</h2>
+        <p>By accessing or using our Service, you agree to be bound by these Terms. If you disagree with any part of the terms, then you may not access the Service.</p>
+        
+        <h2>Description of Service</h2>
+        <p>InsectiScan is a mobile application that uses image recognition and artificial intelligence to help identify insect bites based on user-provided photos and descriptions. The Service also provides general information about treatment options and potential risk assessments.</p>
+        
+        <h2>User Accounts</h2>
+        <p>When you create an account with us, you must provide information that is accurate, complete, and current at all times. Failure to do so constitutes a breach of the Terms, which may result in immediate termination of your account on our Service.</p>
+        
+        <p>You are responsible for safeguarding the password that you use to access the Service and for any activities or actions under your password. You agree not to disclose your password to any third party. You must notify us immediately upon becoming aware of any breach of security or unauthorized use of your account.</p>
+        
+        <h2>User Content</h2>
+        <p>Our Service allows you to upload images of insect bites for identification purposes. You retain all rights to your content, but you grant us a worldwide, non-exclusive, royalty-free license to use, reproduce, and display your content in connection with the Service.</p>
+        
+        <p>You are solely responsible for the content you upload and ensure that you have the necessary rights to share such content. You understand that your content may be used anonymously to improve our identification algorithms.</p>
+        
+        <h2>Medical Disclaimer</h2>
+        <p>The information provided through the Service is for general informational and educational purposes only. It is not intended as a substitute for professional medical advice, diagnosis, or treatment.</p>
+        
+        <p>Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition. Never disregard professional medical advice or delay in seeking it because of something you have read on or through our Service.</p>
+        
+        <div class="important">
+            <p>If you think you may have a medical emergency, call your doctor or emergency services immediately. InsectiScan does not recommend or endorse any specific tests, physicians, products, procedures, opinions, or other information that may be mentioned on the Service.</p>
+        </div>
+        
+        <h2>Intellectual Property</h2>
+        <p>The Service and its original content (excluding user-provided content), features, and functionality are and will remain the exclusive property of InsectiScan and its licensors. The Service is protected by copyright, trademark, and other laws of both the United States and foreign countries.</p>
+        
+        <p>Our trademarks and trade dress may not be used in connection with any product or service without the prior written consent of InsectiScan.</p>
+        
+        <h2>Termination</h2>
+        <p>We may terminate or suspend your account immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.</p>
+        
+        <p>Upon termination, your right to use the Service will immediately cease. If you wish to terminate your account, you may simply discontinue using the Service or delete your account through the app settings.</p>
+        
+        <h2>Limitation of Liability</h2>
+        <p>In no event shall InsectiScan, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the Service.</p>
+        
+        <h2>Changes to Terms</h2>
+        <p>We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material, we will try to provide at least 30 days' notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion.</p>
+        
+        <h2>Contact Us</h2>
+        <p>If you have any questions about these Terms, please contact us at:</p>
+        <p>Email: legal@insectiscan.org</p>
