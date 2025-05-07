@@ -1,20 +1,13 @@
 from flask import request, jsonify
 from flask import Flask, render_template, send_from_directory, redirect
 import os
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from dotenv import load_dotenv
-
-load_dotenv()  # Load environment variables from .env file
+import csv
+from datetime import datetime
 
 app = Flask(__name__)
 
-# Email configuration - Set these in your environment or .env file
-EMAIL_USER = os.environ.get('EMAIL_USER', '')
-EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD', '')
-EMAIL_SERVER = os.environ.get('EMAIL_SERVER', 'smtp.gmail.com')
-EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587))
+# File to store email addresses
+EMAIL_LIST_FILE = 'notify_emails.csv'
 
 @app.route('/')
 def index():
@@ -50,7 +43,7 @@ def terms():
 
 @app.route('/notify', methods=['POST'])
 def notify():
-    """Handle email notification requests and send email to insectiscan@gmail.com"""
+    """Store email addresses for app launch notification"""
     if request.method == 'POST':
         data = request.get_json()
         email = data.get('email')
@@ -59,52 +52,40 @@ def notify():
             return jsonify({"success": False, "message": "Email address is required."}), 400
         
         try:
-            # Send email notification to insectiscan@gmail.com
-            send_notification_email(email)
+            # Store email in CSV file
+            store_email(email)
+            
+            # Print for server logs
+            print(f"Notification request received for: {email}")
             
             # Return success response
             return jsonify({"success": True, "message": "Thank you! We'll notify you when InsectiScan is ready."}), 200
         except Exception as e:
             print(f"Error processing notification request: {e}")
-            # Even if email sending fails, show success to the user 
-            # but log the error for admin troubleshooting
+            # Even if storage fails, show success to the user
             return jsonify({"success": True, "message": "Thank you! We'll notify you when InsectiScan is ready."}), 200
 
-
-def send_notification_email(user_email):
-    """Send an email to insectiscan@gmail.com with the user's email"""
-    try:
-        # Email message setup
-        msg = MIMEMultipart()
-        msg['From'] = EMAIL_USER
-        msg['To'] = 'insectiscan@gmail.com'
-        msg['Subject'] = 'New InsectiScan App Notification Request'
-        
-        # Email body
-        body = f"""
-        Hello InsectiScan Team,
-        
-        A new user has requested to be notified when the InsectiScan app is ready.
-        
-        User Email: {user_email}
-        
-        This email was automatically generated from your website's notification form.
-        """
-        
-        msg.attach(MIMEText(body, 'plain'))
-        
-        # Connect to email server and send
-        with smtplib.SMTP(EMAIL_SERVER, EMAIL_PORT) as server:
-            server.starttls()  # Secure the connection
-            server.login(EMAIL_USER, EMAIL_PASSWORD)
-            server.send_message(msg)
-            
-        print(f"Notification email sent successfully for user: {user_email}")
-        return True
-    except Exception as e:
-        print(f"Failed to send email notification: {e}")
-        # Re-raise the exception to be caught by the calling function
-        raise
+def store_email(email):
+    """Store email address in CSV file with timestamp"""
+    # Create file if it doesn't exist
+    if not os.path.exists(EMAIL_LIST_FILE):
+        with open(EMAIL_LIST_FILE, 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow(['Email', 'Date'])
+    
+    # Check if email already exists
+    emails = []
+    if os.path.exists(EMAIL_LIST_FILE):
+        with open(EMAIL_LIST_FILE, 'r') as file:
+            reader = csv.reader(file)
+            next(reader, None)  # Skip header
+            emails = [row[0] for row in reader]
+    
+    # Only add if email doesn't exist already
+    if email not in emails:
+        with open(EMAIL_LIST_FILE, 'a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([email, datetime.now().strftime('%Y-%m-%d %H:%M:%S')])
 
 # This ensures Flask knows where to find templates
 app.template_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
