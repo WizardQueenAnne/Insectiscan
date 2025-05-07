@@ -2,6 +2,9 @@ from flask import request, jsonify
 from flask import Flask, render_template, send_from_directory, redirect
 import os
 import csv
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 from datetime import datetime
 
 app = Flask(__name__)
@@ -43,7 +46,7 @@ def terms():
 
 @app.route('/notify', methods=['POST'])
 def notify():
-    """Store email addresses for app launch notification"""
+    """Store email address and send an email to insectiscan@gmail.com"""
     if request.method == 'POST':
         data = request.get_json()
         email = data.get('email')
@@ -55,11 +58,19 @@ def notify():
             # Store email in CSV file
             store_email(email)
             
-            # Print for server logs
+            # Print for server logs - helpful for checking
             print(f"Notification request received for: {email}")
             
+            # Send email to insectiscan@gmail.com directly from user's client
+            # The email will be sent by the user's browser using mailto
+            # You'll see this interaction in the frontend JavaScript
+            
             # Return success response
-            return jsonify({"success": True, "message": "Thank you! We'll notify you when InsectiScan is ready."}), 200
+            return jsonify({
+                "success": True, 
+                "message": "Thank you! We'll notify you when InsectiScan is ready.",
+                "email": email
+            }), 200
         except Exception as e:
             print(f"Error processing notification request: {e}")
             # Even if storage fails, show success to the user
