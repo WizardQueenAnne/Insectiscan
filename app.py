@@ -1,9 +1,6 @@
 from flask import request, jsonify
 from flask import Flask, render_template, send_from_directory, redirect
 import os
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 
 app = Flask(__name__)
 
@@ -49,32 +46,30 @@ def notify():
         # In a production environment, you would send an email to insectiscan@gmail.com
         # This would require configuring SMTP settings and credentials
         try:
-            # This is a placeholder for actual email sending code
-            # You would replace this with your actual SMTP settings
-            '''
-            sender_email = "your-app-email@example.com"
-            receiver_email = "insectiscan@gmail.com"
-            password = "your-email-password"  # Use environment variables in production
-            
-            message = MIMEMultipart()
-            message["From"] = sender_email
-            message["To"] = receiver_email
-            message["Subject"] = "New InsectiScan App Notification Request"
-            
-            body = f"A user has requested to be notified when InsectiScan is ready.\n\nEmail: {email}"
-            message.attach(MIMEText(body, "plain"))
-            
-            with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-                server.login(sender_email, password)
-                server.sendmail(sender_email, receiver_email, message.as_string())
-            '''
-            
             # For demonstration, we'll just log this
             print(f"Email notification request received for: {email}")
             
+            # Here you would add the code to send an email to insectiscan@gmail.com
+            # For example, using Flask-Mail or a similar library
+            # This is commented out since it requires additional setup
+            
+            """
+            # Example using Flask-Mail (you would need to install and configure it)
+            from flask_mail import Mail, Message
+            
+            mail = Mail(app)
+            msg = Message(
+                subject="New InsectiScan App Notification Request",
+                sender=app.config.get("MAIL_DEFAULT_SENDER"),
+                recipients=["insectiscan@gmail.com"]
+            )
+            msg.body = f"A user has requested to be notified when InsectiScan is ready.\n\nEmail: {email}"
+            mail.send(msg)
+            """
+            
             return jsonify({"success": True, "message": "Thank you! We'll notify you when InsectiScan is ready."}), 200
         except Exception as e:
-            print(f"Error sending notification email: {e}")
+            print(f"Error processing notification request: {e}")
             return jsonify({"success": False, "message": "There was an error processing your request. Please try again later."}), 500
 
 # This ensures Flask knows where to find templates
