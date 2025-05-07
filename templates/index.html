@@ -120,28 +120,34 @@
                 <p>Using InsectiScan is as easy as 1-2-3</p>
             </div>
             <div class="steps">
-                <div class="step-container">
+                <div class="step">
                     <div class="step-image">
                         <img src="{{ url_for('static', filename='img/bite-scanner.png') }}" alt="InsectiScan Interface">
-                        <div class="step-markers">
-                            <div class="step-marker" id="marker-1">1</div>
-                            <div class="step-marker" id="marker-2">2</div>
-                            <div class="step-marker" id="marker-3">3</div>
-                        </div>
                     </div>
-                    <div class="steps-content">
-                        <div class="step-content">
-                            <h3><span class="step-bullet">1</span> Take a Photo</h3>
-                            <p>Capture a clear image of the insect bite, plant, or animal with your smartphone camera</p>
-                        </div>
-                        <div class="step-content">
-                            <h3><span class="step-bullet">2</span> Add Details</h3>
-                            <p>Describe any additional symptoms or information to improve identification accuracy</p>
-                        </div>
-                        <div class="step-content">
-                            <h3><span class="step-bullet">3</span> Get Results</h3>
-                            <p>Receive instant identification, risk assessment, and safety recommendations</p>
-                        </div>
+                    <div class="step-content">
+                        <div class="step-number">1</div>
+                        <h3>Take a Photo</h3>
+                        <p>Capture a clear image of the insect bite, plant, or animal with your smartphone camera</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-image">
+                        <img src="{{ url_for('static', filename='img/bite-scanner.png') }}" alt="InsectiScan Interface">
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">2</div>
+                        <h3>Add Details</h3>
+                        <p>Describe any additional symptoms or information to improve identification accuracy</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-image">
+                        <img src="{{ url_for('static', filename='img/bite-scanner.png') }}" alt="InsectiScan Interface">
+                    </div>
+                    <div class="step-content">
+                        <div class="step-number">3</div>
+                        <h3>Get Results</h3>
+                        <p>Receive instant identification, risk assessment, and safety recommendations</p>
                     </div>
                 </div>
             </div>
@@ -157,10 +163,11 @@
             <div class="download-notice">
                 <p>InsectiScan is still in development. We'll notify you when it is complete.</p>
                 <div class="email-signup">
-                    <form action="#" method="post" class="signup-form">
-                        <input type="email" name="email" placeholder="Enter your email address" required>
+                    <form id="notify-form" class="signup-form">
+                        <input type="email" id="notify-email" name="email" placeholder="Enter your email address" required>
                         <button type="submit" class="btn-notify">Notify Me</button>
                     </form>
+                    <div id="notification-message" style="display: none; margin-top: 15px; padding: 10px; border-radius: 5px; text-align: center;"></div>
                 </div>
             </div>
             <div class="download-options">
@@ -217,7 +224,6 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
-                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="InsectiScan Logo">
                     <span>InsectiScan</span>
                 </div>
                 <div class="footer-links">
