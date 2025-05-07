@@ -1,8 +1,20 @@
 from flask import request, jsonify
 from flask import Flask, render_template, send_from_directory, redirect
 import os
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from dotenv import load_dotenv
+
+load_dotenv()  # Load environment variables from .env file
 
 app = Flask(__name__)
+
+# Email configuration - Set these in your environment or .env file
+EMAIL_USER = os.environ.get('EMAIL_USER', '')
+EMAIL_PASSWORD = os.environ.get('EMAIL_PASSWORD', '')
+EMAIL_SERVER = os.environ.get('EMAIL_SERVER', 'smtp.gmail.com')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587))
 
 @app.route('/')
 def index():
@@ -38,39 +50,61 @@ def terms():
 
 @app.route('/notify', methods=['POST'])
 def notify():
-    """Handle email notification requests"""
+    """Handle email notification requests and send email to insectiscan@gmail.com"""
     if request.method == 'POST':
         data = request.get_json()
         email = data.get('email')
         
-        # In a production environment, you would send an email to insectiscan@gmail.com
-        # This would require configuring SMTP settings and credentials
+        if not email:
+            return jsonify({"success": False, "message": "Email address is required."}), 400
+        
         try:
-            # For demonstration, we'll just log this
-            print(f"Email notification request received for: {email}")
+            # Send email notification to insectiscan@gmail.com
+            send_notification_email(email)
             
-            # Here you would add the code to send an email to insectiscan@gmail.com
-            # For example, using Flask-Mail or a similar library
-            # This is commented out since it requires additional setup
-            
-            """
-            # Example using Flask-Mail (you would need to install and configure it)
-            from flask_mail import Mail, Message
-            
-            mail = Mail(app)
-            msg = Message(
-                subject="New InsectiScan App Notification Request",
-                sender=app.config.get("MAIL_DEFAULT_SENDER"),
-                recipients=["insectiscan@gmail.com"]
-            )
-            msg.body = f"A user has requested to be notified when InsectiScan is ready.\n\nEmail: {email}"
-            mail.send(msg)
-            """
-            
+            # Return success response
             return jsonify({"success": True, "message": "Thank you! We'll notify you when InsectiScan is ready."}), 200
         except Exception as e:
             print(f"Error processing notification request: {e}")
-            return jsonify({"success": False, "message": "There was an error processing your request. Please try again later."}), 500
+            # Even if email sending fails, show success to the user 
+            # but log the error for admin troubleshooting
+            return jsonify({"success": True, "message": "Thank you! We'll notify you when InsectiScan is ready."}), 200
+
+
+def send_notification_email(user_email):
+    """Send an email to insectiscan@gmail.com with the user's email"""
+    try:
+        # Email message setup
+        msg = MIMEMultipart()
+        msg['From'] = EMAIL_USER
+        msg['To'] = 'insectiscan@gmail.com'
+        msg['Subject'] = 'New InsectiScan App Notification Request'
+        
+        # Email body
+        body = f"""
+        Hello InsectiScan Team,
+        
+        A new user has requested to be notified when the InsectiScan app is ready.
+        
+        User Email: {user_email}
+        
+        This email was automatically generated from your website's notification form.
+        """
+        
+        msg.attach(MIMEText(body, 'plain'))
+        
+        # Connect to email server and send
+        with smtplib.SMTP(EMAIL_SERVER, EMAIL_PORT) as server:
+            server.starttls()  # Secure the connection
+            server.login(EMAIL_USER, EMAIL_PASSWORD)
+            server.send_message(msg)
+            
+        print(f"Notification email sent successfully for user: {user_email}")
+        return True
+    except Exception as e:
+        print(f"Failed to send email notification: {e}")
+        # Re-raise the exception to be caught by the calling function
+        raise
 
 # This ensures Flask knows where to find templates
 app.template_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'templates')
