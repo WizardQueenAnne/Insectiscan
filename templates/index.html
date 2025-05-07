@@ -156,16 +156,17 @@
                 <h2>Download InsectiScan Today</h2>
                 <p>Available on iOS and Android devices</p>
             </div>
-            <div class="download-notice">
-                <p>InsectiScan is still in development. We'll notify you when it is complete.</p>
-                <div class="email-signup">
-                    <form id="notify-form" class="signup-form">
-                        <input type="email" id="notify-email" name="email" placeholder="Enter your email address" required>
-                        <button type="submit" class="btn-notify">Notify Me</button>
-                    </form>
-                    <div id="notification-message" style="display: none; margin-top: 15px; padding: 10px; border-radius: 5px; text-align: center;"></div>
-                </div>
-            </div>
+            <!-- Replace your existing download notice in index.html with this -->
+<div class="download-notice">
+    <p>InsectiScan is still in development. We'll notify you when it is complete.</p>
+    <div class="email-signup">
+        <form id="notify-form" class="signup-form">
+            <input type="email" id="notify-email" name="email" placeholder="Enter your email address" required>
+            <button type="submit" class="btn-notify">Notify Me</button>
+        </form>
+        <div id="notification-message" style="display: none; margin-top: 15px; padding: 10px; border-radius: 5px; text-align: center;"></div>
+    </div>
+</div>
             <div class="download-options">
                 <a href="{{ url_for('download_ios') }}" class="download-button ios">
                     <div class="download-icon">
