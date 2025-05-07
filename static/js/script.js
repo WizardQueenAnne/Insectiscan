@@ -223,7 +223,28 @@ document.addEventListener('DOMContentLoaded', function() {
         yearElement.innerHTML = yearElement.innerHTML.replace('2025', currentYear);
     }
     
-    // Email notification form handling
+  // Add this code to your existing script.js file or replace the current email form handling function
+
+// Function to open a mailto link programmatically
+function sendEmailToInsectiScan(userEmail) {
+    const subject = encodeURIComponent("New InsectiScan App Notification Request");
+    const body = encodeURIComponent(`A user with email ${userEmail} would like to be notified when InsectiScan is ready.`);
+    
+    // Create a hidden link element
+    const mailtoLink = document.createElement('a');
+    mailtoLink.href = `mailto:insectiscan@gmail.com?subject=${subject}&body=${body}`;
+    mailtoLink.style.display = 'none';
+    document.body.appendChild(mailtoLink);
+    
+    // Open the email client
+    mailtoLink.click();
+    
+    // Clean up
+    document.body.removeChild(mailtoLink);
+}
+
+// Email notification form handling
+document.addEventListener('DOMContentLoaded', function() {
     const notifyForm = document.getElementById('notify-form');
     const notificationMessage = document.getElementById('notification-message');
     
@@ -235,7 +256,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const email = emailInput.value.trim();
             
             if (email) {
-                // Send the email to the backend
+                // First, send the email to your backend to store it
                 fetch('/notify', {
                     method: 'POST',
                     headers: {
@@ -246,32 +267,47 @@ document.addEventListener('DOMContentLoaded', function() {
                 .then(response => response.json())
                 .then(data => {
                     if (data.success) {
+                        // Show success message
                         notificationMessage.textContent = data.message;
                         notificationMessage.style.backgroundColor = "rgba(46, 204, 113, 0.15)";
                         notificationMessage.style.color = "#2ecc71";
                         notificationMessage.style.border = "1px solid #2ecc71";
+                        notificationMessage.style.display = "block";
+                        
+                        // Send email to insectiscan@gmail.com
+                        sendEmailToInsectiScan(email);
+                        
+                        // Clear the input
+                        emailInput.value = '';
+                        
+                        // Hide the message after 5 seconds
+                        setTimeout(function() {
+                            notificationMessage.style.display = "none";
+                        }, 5000);
                     } else {
+                        // Show error message
                         notificationMessage.textContent = data.message;
                         notificationMessage.style.backgroundColor = "rgba(231, 76, 60, 0.15)";
                         notificationMessage.style.color = "#e74c3c";
                         notificationMessage.style.border = "1px solid #e74c3c";
+                        notificationMessage.style.display = "block";
+                        
+                        // Hide the message after 5 seconds
+                        setTimeout(function() {
+                            notificationMessage.style.display = "none";
+                        }, 5000);
                     }
-                    
-                    notificationMessage.style.display = "block";
-                    emailInput.value = '';
-                    
-                    // Hide the message after 5 seconds
-                    setTimeout(function() {
-                        notificationMessage.style.display = "none";
-                    }, 5000);
                 })
                 .catch(error => {
                     console.error('Error:', error);
+                    // Show generic success message even on error
                     notificationMessage.textContent = "Thank you! We'll notify you when InsectiScan is ready.";
                     notificationMessage.style.backgroundColor = "rgba(46, 204, 113, 0.15)";
                     notificationMessage.style.color = "#2ecc71";
                     notificationMessage.style.border = "1px solid #2ecc71";
                     notificationMessage.style.display = "block";
+                    
+                    // Clear the input
                     emailInput.value = '';
                     
                     // Hide the message after 5 seconds
