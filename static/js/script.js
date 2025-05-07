@@ -222,4 +222,64 @@ document.addEventListener('DOMContentLoaded', function() {
         const currentYear = new Date().getFullYear();
         yearElement.innerHTML = yearElement.innerHTML.replace('2025', currentYear);
     }
+    
+    // Email notification form handling
+    const notifyForm = document.getElementById('notify-form');
+    const notificationMessage = document.getElementById('notification-message');
+    
+    if (notifyForm) {
+        notifyForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const emailInput = document.getElementById('notify-email');
+            const email = emailInput.value.trim();
+            
+            if (email) {
+                // Send the email to the backend
+                fetch('/notify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: email }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        notificationMessage.textContent = data.message;
+                        notificationMessage.style.backgroundColor = "rgba(46, 204, 113, 0.15)";
+                        notificationMessage.style.color = "#2ecc71";
+                        notificationMessage.style.border = "1px solid #2ecc71";
+                    } else {
+                        notificationMessage.textContent = data.message;
+                        notificationMessage.style.backgroundColor = "rgba(231, 76, 60, 0.15)";
+                        notificationMessage.style.color = "#e74c3c";
+                        notificationMessage.style.border = "1px solid #e74c3c";
+                    }
+                    
+                    notificationMessage.style.display = "block";
+                    emailInput.value = '';
+                    
+                    // Hide the message after 5 seconds
+                    setTimeout(function() {
+                        notificationMessage.style.display = "none";
+                    }, 5000);
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    notificationMessage.textContent = "Thank you! We'll notify you when InsectiScan is ready.";
+                    notificationMessage.style.backgroundColor = "rgba(46, 204, 113, 0.15)";
+                    notificationMessage.style.color = "#2ecc71";
+                    notificationMessage.style.border = "1px solid #2ecc71";
+                    notificationMessage.style.display = "block";
+                    emailInput.value = '';
+                    
+                    // Hide the message after 5 seconds
+                    setTimeout(function() {
+                        notificationMessage.style.display = "none";
+                    }, 5000);
+                });
+            }
+        });
+    }
 });
