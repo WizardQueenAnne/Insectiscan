@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, observerOptions);
     
-    document.querySelectorAll('.feature-card, .step, .testimonial, .about-content, .cta').forEach(element => {
+    document.querySelectorAll('.feature-card, .step-item, .testimonial, .about-content, .cta').forEach(element => {
         observer.observe(element);
     });
     
