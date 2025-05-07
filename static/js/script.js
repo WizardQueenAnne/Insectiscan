@@ -243,6 +243,8 @@ function sendEmailToInsectiScan(userEmail) {
     document.body.removeChild(mailtoLink);
 }
 
+// Add this to the bottom of your existing script.js file or replace the current form handling code
+
 // Email notification form handling
 document.addEventListener('DOMContentLoaded', function() {
     const notifyForm = document.getElementById('notify-form');
@@ -250,13 +252,19 @@ document.addEventListener('DOMContentLoaded', function() {
     
     if (notifyForm) {
         notifyForm.addEventListener('submit', function(e) {
-            e.preventDefault();
+            e.preventDefault(); // Prevent the form from submitting normally
             
             const emailInput = document.getElementById('notify-email');
             const email = emailInput.value.trim();
             
             if (email) {
-                // First, send the email to your backend to store it
+                // Disable the button while submitting
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalBtnText = submitBtn.innerHTML;
+                submitBtn.innerHTML = 'Sending...';
+                submitBtn.disabled = true;
+                
+                // Send the email to the backend
                 fetch('/notify', {
                     method: 'POST',
                     headers: {
@@ -266,6 +274,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
                 .then(response => response.json())
                 .then(data => {
+                    // Reset the button
+                    submitBtn.innerHTML = originalBtnText;
+                    submitBtn.disabled = false;
+                    
                     if (data.success) {
                         // Show success message
                         notificationMessage.textContent = data.message;
@@ -274,31 +286,27 @@ document.addEventListener('DOMContentLoaded', function() {
                         notificationMessage.style.border = "1px solid #2ecc71";
                         notificationMessage.style.display = "block";
                         
-                        // Send email to insectiscan@gmail.com
-                        sendEmailToInsectiScan(email);
-                        
                         // Clear the input
                         emailInput.value = '';
-                        
-                        // Hide the message after 5 seconds
-                        setTimeout(function() {
-                            notificationMessage.style.display = "none";
-                        }, 5000);
                     } else {
                         // Show error message
-                        notificationMessage.textContent = data.message;
+                        notificationMessage.textContent = data.message || "There was an error processing your request.";
                         notificationMessage.style.backgroundColor = "rgba(231, 76, 60, 0.15)";
                         notificationMessage.style.color = "#e74c3c";
                         notificationMessage.style.border = "1px solid #e74c3c";
                         notificationMessage.style.display = "block";
-                        
-                        // Hide the message after 5 seconds
-                        setTimeout(function() {
-                            notificationMessage.style.display = "none";
-                        }, 5000);
                     }
+                    
+                    // Hide the message after 5 seconds
+                    setTimeout(function() {
+                        notificationMessage.style.display = "none";
+                    }, 5000);
                 })
                 .catch(error => {
+                    // Reset the button
+                    submitBtn.innerHTML = originalBtnText;
+                    submitBtn.disabled = false;
+                    
                     console.error('Error:', error);
                     // Show generic success message even on error
                     notificationMessage.textContent = "Thank you! We'll notify you when InsectiScan is ready.";
