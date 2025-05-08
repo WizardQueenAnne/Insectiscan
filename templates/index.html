@@ -150,46 +150,89 @@
         </div>
     </section>
 
-    <section id="download" class="download">
-        <div class="container">
-            <div class="section-header">
-                <h2>Download InsectiScan Today</h2>
-                <p>Available on iOS and Android devices</p>
-            </div>
-            <!-- Replace your existing download notice in index.html with this -->
-<div class="download-notice">
-    <p>InsectiScan is still in development. We'll notify you when it is complete.</p>
-    <div class="email-signup">
-        <form id="notify-form" class="signup-form">
-            <input type="email" id="notify-email" name="email" placeholder="Enter your email address" required>
-            <button type="submit" class="btn-notify">Notify Me</button>
-        </form>
-        <div id="notification-message" style="display: none; margin-top: 15px; padding: 10px; border-radius: 5px; text-align: center;"></div>
-    </div>
-</div>
-            <div class="download-options">
-                <a href="{{ url_for('download_ios') }}" class="download-button ios">
-                    <div class="download-icon">
-                        <i class="fab fa-apple"></i>
-                    </div>
-                    <div class="download-text">
-                        <span class="small-text">Download on the</span>
-                        <span class="big-text">App Store</span>
-                    </div>
-                </a>
-                <a href="{{ url_for('download_android') }}" class="download-button android">
-                    <div class="download-icon">
-                        <i class="fab fa-google-play"></i>
-                    </div>
-                    <div class="download-text">
-                        <span class="small-text">GET IT ON</span>
-                        <span class="big-text">Google Play</span>
-                    </div>
-                </a>
+<!-- Replace your entire download section with this -->
+<section id="download" class="download">
+    <div class="container">
+        <div class="section-header">
+            <h2>Download InsectiScan Today</h2>
+            <p>Available on iOS and Android devices</p>
+        </div>
+        <div class="download-notice">
+            <p>InsectiScan is still in development. We'll notify you when it is complete.</p>
+            <div class="email-signup">
+                <div id="email-form">
+                    <input type="email" id="notify-email" placeholder="Enter your email address" required>
+                    <button id="notify-button" class="btn-notify">Notify Me</button>
+                    <div id="notification-message" style="display: none; margin-top: 15px; padding: 10px; border-radius: 5px; text-align: center;"></div>
+                </div>
             </div>
         </div>
-    </section>
-
+        <div class="download-options">
+            <a href="{{ url_for('download_ios') }}" class="download-button ios">
+                <div class="download-icon">
+                    <i class="fab fa-apple"></i>
+                </div>
+                <div class="download-text">
+                    <span class="small-text">Download on the</span>
+                    <span class="big-text">App Store</span>
+                </div>
+            </a>
+            <a href="{{ url_for('download_android') }}" class="download-button android">
+                <div class="download-icon">
+                    <i class="fab fa-google-play"></i>
+                </div>
+                <div class="download-text">
+                    <span class="small-text">GET IT ON</span>
+                    <span class="big-text">Google Play</span>
+                </div>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Add this script directly in the HTML -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var notifyButton = document.getElementById('notify-button');
+            var emailInput = document.getElementById('notify-email');
+            var notificationMessage = document.getElementById('notification-message');
+            
+            if (notifyButton && emailInput && notificationMessage) {
+                notifyButton.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    var email = emailInput.value.trim();
+                    if (email) {
+                        // Just show a message and clear the field
+                        notificationMessage.textContent = "Thank you! We'll notify you when InsectiScan is ready.";
+                        notificationMessage.style.backgroundColor = "rgba(46, 204, 113, 0.15)";
+                        notificationMessage.style.color = "#2ecc71";
+                        notificationMessage.style.border = "1px solid #2ecc71";
+                        notificationMessage.style.display = "block";
+                        
+                        emailInput.value = '';
+                        
+                        // Send email to insectiscan@gmail.com automatically
+                        var subject = "New InsectiScan App Notification Request";
+                        var body = "A user with email " + email + " would like to be notified when InsectiScan is ready.";
+                        var mailtoLink = document.createElement('a');
+                        mailtoLink.setAttribute('href', 'mailto:insectiscan@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body));
+                        mailtoLink.style.display = 'none';
+                        document.body.appendChild(mailtoLink);
+                        mailtoLink.click();
+                        document.body.removeChild(mailtoLink);
+                        
+                        // Hide the message after 5 seconds
+                        setTimeout(function() {
+                            notificationMessage.style.display = "none";
+                        }, 5000);
+                    }
+                });
+            } else {
+                console.error("Could not find all required elements");
+            }
+        });
+    </script>
+</section>
     <section id="about" class="about">
         <div class="container">
             <div class="about-content">
