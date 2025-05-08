@@ -160,11 +160,11 @@
         <div class="download-notice">
             <p>InsectiScan is still in development. We'll notify you when it is complete.</p>
             <div class="email-signup">
-                <div id="email-form">
-                    <input type="email" id="notify-email" placeholder="Enter your email address" required>
-                    <button id="notify-button" class="btn-notify">Notify Me</button>
-                    <div id="notification-message" style="display: none; margin-top: 15px; padding: 10px; border-radius: 5px; text-align: center;"></div>
-                </div>
+                <form id="notify-form" class="signup-form">
+                    <input type="email" id="notify-email" name="email" placeholder="Enter your email address" required>
+                    <button type="submit" class="btn-notify">Notify Me</button>
+                </form>
+                <div id="notification-message" style="display: none; margin-top: 15px; padding: 10px; border-radius: 5px; text-align: center;"></div>
             </div>
         </div>
         <div class="download-options">
@@ -188,51 +188,55 @@
             </a>
         </div>
     </div>
+</section>
+
+<!-- Add this script right before the closing </body> tag -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get the form and message elements
+    var notifyForm = document.getElementById('notify-form');
+    var emailInput = document.getElementById('notify-email');
+    var notificationMessage = document.getElementById('notification-message');
     
-    <!-- Add this script directly in the HTML -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var notifyButton = document.getElementById('notify-button');
-            var emailInput = document.getElementById('notify-email');
-            var notificationMessage = document.getElementById('notification-message');
+    // Add event listener to the form
+    if (notifyForm) {
+        notifyForm.addEventListener('submit', function(event) {
+            // Prevent the default form submission
+            event.preventDefault();
             
-            if (notifyButton && emailInput && notificationMessage) {
-                notifyButton.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    var email = emailInput.value.trim();
-                    if (email) {
-                        // Just show a message and clear the field
-                        notificationMessage.textContent = "Thank you! We'll notify you when InsectiScan is ready.";
-                        notificationMessage.style.backgroundColor = "rgba(46, 204, 113, 0.15)";
-                        notificationMessage.style.color = "#2ecc71";
-                        notificationMessage.style.border = "1px solid #2ecc71";
-                        notificationMessage.style.display = "block";
-                        
-                        emailInput.value = '';
-                        
-                        // Send email to insectiscan@gmail.com automatically
-                        var subject = "New InsectiScan App Notification Request";
-                        var body = "A user with email " + email + " would like to be notified when InsectiScan is ready.";
-                        var mailtoLink = document.createElement('a');
-                        mailtoLink.setAttribute('href', 'mailto:insectiscan@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(body));
-                        mailtoLink.style.display = 'none';
-                        document.body.appendChild(mailtoLink);
-                        mailtoLink.click();
-                        document.body.removeChild(mailtoLink);
-                        
-                        // Hide the message after 5 seconds
-                        setTimeout(function() {
-                            notificationMessage.style.display = "none";
-                        }, 5000);
-                    }
-                });
-            } else {
-                console.error("Could not find all required elements");
+            // Get the email value
+            var email = emailInput.value.trim();
+            
+            if (email) {
+                // Show success message
+                notificationMessage.textContent = "Thank you! We'll notify you when InsectiScan is ready.";
+                notificationMessage.style.backgroundColor = "rgba(46, 204, 113, 0.15)";
+                notificationMessage.style.color = "#2ecc71";
+                notificationMessage.style.border = "1px solid #2ecc71";
+                notificationMessage.style.display = "block";
+                
+                // Log the email to console (you can see this in developer tools)
+                console.log("Email to notify: " + email);
+                
+                // Save to localStorage as a simple way to store emails
+                var savedEmails = localStorage.getItem('insectiscanEmails') || '';
+                if (!savedEmails.includes(email)) {
+                    savedEmails += email + ',';
+                    localStorage.setItem('insectiscanEmails', savedEmails);
+                }
+                
+                // Clear the input
+                emailInput.value = '';
+                
+                // Hide the message after 5 seconds
+                setTimeout(function() {
+                    notificationMessage.style.display = "none";
+                }, 5000);
             }
         });
-    </script>
-</section>
+    }
+});
+</script>
     <section id="about" class="about">
         <div class="container">
             <div class="about-content">
