@@ -43,7 +43,7 @@ def terms():
 
 @app.route('/notify', methods=['POST'])
 def notify():
-    """Store email address and log for admin review"""
+    """Store email address for notification"""
     if request.method == 'POST':
         data = request.get_json()
         email = data.get('email')
@@ -55,7 +55,7 @@ def notify():
             # Store email in CSV file
             store_email(email)
             
-            # Print to console/logs - you'll see this in your terminal
+            # Print notification for server logs
             print(f"NOTIFICATION REQUEST: {email} wants to be notified when InsectiScan is ready.")
             
             # Return success response
