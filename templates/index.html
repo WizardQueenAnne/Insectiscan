@@ -157,16 +157,14 @@
             <h2>Download InsectiScan Today</h2>
             <p>Available on iOS and Android devices</p>
         </div>
-        <div class="download-notice">
-            <p>InsectiScan is still in development. We'll notify you when it is complete.</p>
-            <div class="email-signup">
-                <form id="notify-form" class="signup-form">
-                    <input type="email" id="notify-email" name="email" placeholder="Enter your email address" required>
-                    <button type="submit" class="btn-notify">Notify Me</button>
-                </form>
-                <div id="notification-message" style="display: none; margin-top: 15px; padding: 10px; border-radius: 5px; text-align: center;"></div>
-            </div>
-        </div>
+<!-- Replace your download notice with this simple version -->
+<div class="download-notice">
+    <p>InsectiScan is still in development. We'll notify you when it is complete.</p>
+    <div class="email-signup" style="text-align: center; margin: 2rem auto;">
+        <a href="mailto:insectiscan@gmail.com?subject=Notify%20Me%20About%20InsectiScan&body=Please%20notify%20me%20when%20the%20InsectiScan%20app%20is%20ready%20for%20download." class="btn-notify" style="display: inline-block; padding: 1.2rem 2.5rem; border-radius: 50px; background-color: #000; color: white; font-weight: 600; font-size: 1.6rem; text-decoration: none; margin-top: 1rem;">Notify Me</a>
+        <p style="margin-top: 1rem; font-size: 1.4rem; color: rgba(255, 255, 255, 0.8);">Click the button above to send us an email and get notified when InsectiScan launches.</p>
+    </div>
+</div>
         <div class="download-options">
             <a href="{{ url_for('download_ios') }}" class="download-button ios">
                 <div class="download-icon">
