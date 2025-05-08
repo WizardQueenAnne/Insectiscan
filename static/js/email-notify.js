@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', function() {
         console.log("Found the notification form");
         
         notifyForm.addEventListener('submit', function(e) {
-            console.log("Form submitted");
             e.preventDefault(); // Prevent the form from submitting normally
             
             const emailInput = document.getElementById('notify-email');
@@ -18,26 +17,68 @@ document.addEventListener('DOMContentLoaded', function() {
             console.log("Email entered:", email);
             
             if (email) {
-                // Show notification immediately
-                notificationMessage.textContent = "Thank you! We'll notify you when InsectiScan is ready.";
-                notificationMessage.style.backgroundColor = "rgba(46, 204, 113, 0.15)";
-                notificationMessage.style.color = "#2ecc71";
-                notificationMessage.style.border = "1px solid #2ecc71";
-                notificationMessage.style.display = "block";
+                // Disable the button while submitting
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalBtnText = submitBtn.innerHTML;
+                submitBtn.innerHTML = 'Sending...';
+                submitBtn.disabled = true;
                 
-                // Clear the input
-                emailInput.value = '';
-                
-                // Log the email to the console
-                console.log("Email submitted:", email);
-                
-                // Hide the message after 5 seconds
-                setTimeout(function() {
-                    notificationMessage.style.display = "none";
-                }, 5000);
-                
-                // For actual implementation, you could add the fetch call here
-                // but for now let's just make sure the form submission works
+                // Send the email to the backend
+                fetch('/notify', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: email }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Reset the button
+                    submitBtn.innerHTML = originalBtnText;
+                    submitBtn.disabled = false;
+                    
+                    if (data.success) {
+                        // Show success message
+                        notificationMessage.textContent = data.message;
+                        notificationMessage.style.backgroundColor = "rgba(46, 204, 113, 0.15)";
+                        notificationMessage.style.color = "#2ecc71";
+                        notificationMessage.style.border = "1px solid #2ecc71";
+                        notificationMessage.style.display = "block";
+                        
+                        // Clear the input
+                        emailInput.value = '';
+                    } else {
+                        // Show error message
+                        notificationMessage.textContent = data.message || "There was an error processing your request.";
+                        notificationMessage.style.backgroundColor = "rgba(231, 76, 60, 0.15)";
+                        notificationMessage.style.color = "#e74c3c";
+                        notificationMessage.style.border = "1px solid #e74c3c";
+                        notificationMessage.style.display = "block";
+                    }
+                    
+                    // Hide the message after 5 seconds
+                    setTimeout(function() {
+                        notificationMessage.style.display = "none";
+                    }, 5000);
+                })
+                .catch(error => {
+                    // Reset the button
+                    submitBtn.innerHTML = originalBtnText;
+                    submitBtn.disabled = false;
+                    
+                    console.error('Error:', error);
+                    // Show error message
+                    notificationMessage.textContent = "There was an error submitting your email. Please try again later.";
+                    notificationMessage.style.backgroundColor = "rgba(231, 76, 60, 0.15)";
+                    notificationMessage.style.color = "#e74c3c";
+                    notificationMessage.style.border = "1px solid #e74c3c";
+                    notificationMessage.style.display = "block";
+                    
+                    // Hide the message after 5 seconds
+                    setTimeout(function() {
+                        notificationMessage.style.display = "none";
+                    }, 5000);
+                });
             }
         });
     } else {
