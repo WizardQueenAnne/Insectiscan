@@ -159,16 +159,101 @@
         </div>
 <!-- Replace your download notice with this simple version -->
 <!-- Replace your download notice with this aesthetic email signup form -->
+<!-- Replace this code with your current download notice section in index.html -->
 <div class="download-notice">
     <p>InsectiScan is still in development. We'll notify you when it's ready!</p>
-    <div class="email-signup">
-        <form id="notify-form" class="signup-form">
-            <input type="email" id="notify-email" placeholder="Enter your email address" required>
-            <button type="submit" class="btn-notify">Notify Me</button>
+    
+    <!-- Simple email input and button -->
+    <div style="max-width: 500px; margin: 2rem auto;">
+        <form id="email-form" style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
+            <input type="email" id="email-input" placeholder="Enter your email address" required
+                   style="flex: 1; min-width: 280px; padding: 1.2rem 2rem; border-radius: 50px; border: none; 
+                          font-size: 1.6rem; color: #2c3e50; background-color: rgba(255, 255, 255, 0.9);
+                          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
+            
+            <button type="submit" 
+                    style="padding: 1.2rem 2.5rem; border-radius: 50px; border: none; background-color: #000;
+                           color: white; font-weight: 600; font-size: 1.6rem; cursor: pointer; 
+                           transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);">
+                Notify Me
+            </button>
         </form>
-        <div id="notification-message" style="display: none; margin-top: 1.5rem; padding: 1rem; border-radius: 8px; font-size: 1.4rem; text-align: center;"></div>
+        
+        <!-- Success/error message container -->
+        <div id="message-container" style="display: none; margin-top: 1.5rem; padding: 1rem; 
+                                          border-radius: 8px; font-size: 1.4rem; text-align: center;">
+        </div>
     </div>
 </div>
+
+<!-- Add this script right below the HTML above -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('email-form');
+    const emailInput = document.getElementById('email-input');
+    const messageContainer = document.getElementById('message-container');
+    
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = emailInput.value.trim();
+            
+            if (email) {
+                // Show processing state
+                const submitBtn = this.querySelector('button[type="submit"]');
+                submitBtn.textContent = 'Sending...';
+                submitBtn.disabled = true;
+                
+                // Send to backend API
+                fetch('/notify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    // Reset button
+                    submitBtn.textContent = 'Notify Me';
+                    submitBtn.disabled = false;
+                    
+                    // Show success message
+                    messageContainer.textContent = "Thank you! We'll notify you when InsectiScan is ready.";
+                    messageContainer.style.backgroundColor = "rgba(46, 204, 113, 0.15)";
+                    messageContainer.style.color = "#2ecc71";
+                    messageContainer.style.border = "1px solid #2ecc71";
+                    messageContainer.style.display = "block";
+                    
+                    // Clear input
+                    emailInput.value = '';
+                    
+                    // Hide message after 5 seconds
+                    setTimeout(() => {
+                        messageContainer.style.display = "none";
+                    }, 5000);
+                })
+                .catch(error => {
+                    // Reset button
+                    submitBtn.textContent = 'Notify Me';
+                    submitBtn.disabled = false;
+                    
+                    // Show error message
+                    messageContainer.textContent = "There was an error. Please try again.";
+                    messageContainer.style.backgroundColor = "rgba(231, 76, 60, 0.15)";
+                    messageContainer.style.color = "#e74c3c";
+                    messageContainer.style.border = "1px solid #e74c3c";
+                    messageContainer.style.display = "block";
+                    
+                    // Hide message after 5 seconds
+                    setTimeout(() => {
+                        messageContainer.style.display = "none";
+                    }, 5000);
+                });
+            }
+        });
+    }
+});
+</script>
         <div class="download-options">
             <a href="{{ url_for('download_ios') }}" class="download-button ios">
                 <div class="download-icon">
