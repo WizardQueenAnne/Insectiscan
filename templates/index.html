@@ -163,7 +163,7 @@
 <div class="download-notice">
     <p>InsectiScan is still in development. We'll notify you when it's ready!</p>
     
-    <!-- Simple email input and button -->
+    <!-- Email form that triggers email client -->
     <div style="max-width: 500px; margin: 2rem auto;">
         <form id="email-form" style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
             <input type="email" id="email-input" placeholder="Enter your email address" required
@@ -200,55 +200,43 @@ document.addEventListener('DOMContentLoaded', function() {
             const email = emailInput.value.trim();
             
             if (email) {
-                // Show processing state
-                const submitBtn = this.querySelector('button[type="submit"]');
-                submitBtn.textContent = 'Sending...';
-                submitBtn.disabled = true;
-                
-                // Send to backend API
+                // Store the email in CSV file using the backend API
                 fetch('/notify', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email: email })
                 })
                 .then(response => response.json())
-                .then(data => {
-                    // Reset button
-                    submitBtn.textContent = 'Notify Me';
-                    submitBtn.disabled = false;
-                    
-                    // Show success message
-                    messageContainer.textContent = "Thank you! We'll notify you when InsectiScan is ready.";
-                    messageContainer.style.backgroundColor = "rgba(46, 204, 113, 0.15)";
-                    messageContainer.style.color = "#2ecc71";
-                    messageContainer.style.border = "1px solid #2ecc71";
-                    messageContainer.style.display = "block";
-                    
-                    // Clear input
-                    emailInput.value = '';
-                    
-                    // Hide message after 5 seconds
-                    setTimeout(() => {
-                        messageContainer.style.display = "none";
-                    }, 5000);
-                })
-                .catch(error => {
-                    // Reset button
-                    submitBtn.textContent = 'Notify Me';
-                    submitBtn.disabled = false;
-                    
-                    // Show error message
-                    messageContainer.textContent = "There was an error. Please try again.";
-                    messageContainer.style.backgroundColor = "rgba(231, 76, 60, 0.15)";
-                    messageContainer.style.color = "#e74c3c";
-                    messageContainer.style.border = "1px solid #e74c3c";
-                    messageContainer.style.display = "block";
-                    
-                    // Hide message after 5 seconds
-                    setTimeout(() => {
-                        messageContainer.style.display = "none";
-                    }, 5000);
-                });
+                .catch(error => console.error('Error:', error));
+                
+                // Prepare email parameters
+                const subject = encodeURIComponent("InsectiScan App Notification Request");
+                const body = encodeURIComponent(`Hello,\n\nPlease notify me at ${email} when the InsectiScan app is ready for download.\n\nThank you!`);
+                
+                // Create and trigger email link
+                const mailtoLink = document.createElement('a');
+                mailtoLink.href = `mailto:insectiscan@gmail.com?subject=${subject}&body=${body}`;
+                mailtoLink.style.display = 'none';
+                document.body.appendChild(mailtoLink);
+                mailtoLink.click();
+                
+                // Clean up
+                document.body.removeChild(mailtoLink);
+                
+                // Show success message
+                messageContainer.textContent = "Thank you! Your email client should open to send a notification request.";
+                messageContainer.style.backgroundColor = "rgba(46, 204, 113, 0.15)";
+                messageContainer.style.color = "#2ecc71";
+                messageContainer.style.border = "1px solid #2ecc71";
+                messageContainer.style.display = "block";
+                
+                // Clear input
+                emailInput.value = '';
+                
+                // Hide message after 8 seconds
+                setTimeout(() => {
+                    messageContainer.style.display = "none";
+                }, 8000);
             }
         });
     }
