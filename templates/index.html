@@ -160,87 +160,98 @@
 <!-- Replace your download notice with this simple version -->
 <!-- Replace your download notice with this aesthetic email signup form -->
 <!-- Replace this code with your current download notice section in index.html -->
+<!-- Replace this entire section in your index.html -->
 <div class="download-notice">
     <p>InsectiScan is still in development. We'll notify you when it's ready!</p>
     
-    <!-- Email form that triggers email client -->
-    <div style="max-width: 500px; margin: 2rem auto;">
-        <form id="email-form" style="display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;">
-            <input type="email" id="email-input" placeholder="Enter your email address" required
-                   style="flex: 1; min-width: 280px; padding: 1.2rem 2rem; border-radius: 50px; border: none; 
-                          font-size: 1.6rem; color: #2c3e50; background-color: rgba(255, 255, 255, 0.9);
-                          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);">
-            
-            <button type="submit" 
-                    style="padding: 1.2rem 2.5rem; border-radius: 50px; border: none; background-color: #000;
-                           color: white; font-weight: 600; font-size: 1.6rem; cursor: pointer; 
-                           transition: all 0.3s ease; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);">
-                Notify Me
-            </button>
+    <!-- Clean, simplified email form -->
+    <div class="email-signup">
+        <form id="notify-form" class="signup-form">
+            <input type="email" id="notify-email" placeholder="Enter your email address" required>
+            <button type="submit" class="btn-notify">Notify Me</button>
         </form>
-        
-        <!-- Success/error message container -->
-        <div id="message-container" style="display: none; margin-top: 1.5rem; padding: 1rem; 
-                                          border-radius: 8px; font-size: 1.4rem; text-align: center;">
+        <div id="notification-message" style="display: none; margin-top: 1.5rem; padding: 1rem; 
+                                           border-radius: 8px; font-size: 1.4rem; text-align: center;">
         </div>
     </div>
 </div>
 
-<!-- Add this script right below the HTML above -->
+<!-- Updated notification script - place this right below the HTML above -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('email-form');
-    const emailInput = document.getElementById('email-input');
-    const messageContainer = document.getElementById('message-container');
+    const notifyForm = document.getElementById('notify-form');
+    const notifyEmail = document.getElementById('notify-email');
+    const notificationMessage = document.getElementById('notification-message');
     
-    if (form) {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
+    if (notifyForm) {
+        notifyForm.addEventListener('submit', function(e) {
+            e.preventDefault(); // Prevent form submission
             
-            const email = emailInput.value.trim();
+            const email = notifyEmail.value.trim();
             
             if (email) {
-                // Store the email in CSV file using the backend API
+                // Disable the button while submitting
+                const submitBtn = this.querySelector('button[type="submit"]');
+                const originalBtnText = submitBtn.innerHTML;
+                submitBtn.innerHTML = 'Sending...';
+                submitBtn.disabled = true;
+                
+                // Send the email to the backend
                 fetch('/notify', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: email })
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email: email }),
                 })
                 .then(response => response.json())
-                .catch(error => console.error('Error:', error));
-                
-                // Prepare email parameters
-                const subject = encodeURIComponent("InsectiScan App Notification Request");
-                const body = encodeURIComponent(`Hello,\n\nPlease notify me at ${email} when the InsectiScan app is ready for download.\n\nThank you!`);
-                
-                // Create and trigger email link
-                const mailtoLink = document.createElement('a');
-                mailtoLink.href = `mailto:insectiscan@gmail.com?subject=${subject}&body=${body}`;
-                mailtoLink.style.display = 'none';
-                document.body.appendChild(mailtoLink);
-                mailtoLink.click();
-                
-                // Clean up
-                document.body.removeChild(mailtoLink);
-                
-                // Show success message
-                messageContainer.textContent = "Thank you! Your email client should open to send a notification request.";
-                messageContainer.style.backgroundColor = "rgba(46, 204, 113, 0.15)";
-                messageContainer.style.color = "#2ecc71";
-                messageContainer.style.border = "1px solid #2ecc71";
-                messageContainer.style.display = "block";
-                
-                // Clear input
-                emailInput.value = '';
-                
-                // Hide message after 8 seconds
-                setTimeout(() => {
-                    messageContainer.style.display = "none";
-                }, 8000);
+                .then(data => {
+                    // Reset the button
+                    submitBtn.innerHTML = originalBtnText;
+                    submitBtn.disabled = false;
+                    
+                    // Always show success message
+                    notificationMessage.textContent = "Thank you! We'll notify you when InsectiScan is ready.";
+                    notificationMessage.style.backgroundColor = "rgba(46, 204, 113, 0.15)";
+                    notificationMessage.style.color = "#2ecc71";
+                    notificationMessage.style.border = "1px solid #2ecc71";
+                    notificationMessage.style.display = "block";
+                    
+                    // Clear the input
+                    notifyEmail.value = '';
+                    
+                    // Hide the message after 5 seconds
+                    setTimeout(function() {
+                        notificationMessage.style.display = "none";
+                    }, 5000);
+                })
+                .catch(error => {
+                    // Reset the button
+                    submitBtn.innerHTML = originalBtnText;
+                    submitBtn.disabled = false;
+                    
+                    console.error('Error:', error);
+                    // Show generic success message even on error
+                    // (This is important for user experience in case of backend errors)
+                    notificationMessage.textContent = "Thank you! We'll notify you when InsectiScan is ready.";
+                    notificationMessage.style.backgroundColor = "rgba(46, 204, 113, 0.15)";
+                    notificationMessage.style.color = "#2ecc71";
+                    notificationMessage.style.border = "1px solid #2ecc71";
+                    notificationMessage.style.display = "block";
+                    
+                    // Clear the input
+                    notifyEmail.value = '';
+                    
+                    // Hide the message after 5 seconds
+                    setTimeout(function() {
+                        notificationMessage.style.display = "none";
+                    }, 5000);
+                });
             }
         });
     }
 });
+</script>
 </script>
         <div class="download-options">
             <a href="{{ url_for('download_ios') }}" class="download-button ios">
