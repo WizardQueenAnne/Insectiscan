@@ -19,17 +19,10 @@ def serve_static(path):
     """Serve static files (CSS, JS, images)."""
     return send_from_directory('static', path)
 
-@app.route('/download/android')
-def download_android():
-    """Redirect to Android app download."""
-    # Replace with actual Google Play Store URL when available
-    return redirect('https://play.google.com/store/apps/details?id=org.insectiscan.app')
-
 @app.route('/download/ios')
 def download_ios():
     """Redirect to iOS app download."""
-    # Replace with actual App Store URL when available
-    return redirect('https://apps.apple.com/app/insectiscan/id0000000000')
+    return redirect('https://apps.apple.com/us/app/insectiscan/id6745807491')
 
 @app.route('/privacy')
 def privacy():
